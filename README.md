@@ -3,6 +3,7 @@ small golden book application featuring mongoDB + NodeJS (express, mangoose ...)
 
 ## first step
 install NodeJS, Mongo server and npm
+make sure all node modules are well installed in both server and client side (/my-app)
 
 ## launch the app
 
@@ -15,11 +16,14 @@ install NodeJS, Mongo server and npm
 
   node routes.js
 
-### 3) start front-end server (with react-create-app module)
+### 3) start front-end development server (with react-create-app module)
 
   cd my-app
   npm start
 
-### fonctions diverses :
+
+## divers
+
+### faire une requete http post depuis le terminal
 
 curl -d '{"SignatureOfGuest":"val", "MessageofGuest":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/signatures
