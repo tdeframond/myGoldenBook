@@ -44,6 +44,9 @@ class GuestBook extends Component {
 
     onAddClickHandler(event) {
 	    event.preventDefault();
+
+	    if(this.state.SignatureOfGuest === '' || this.state.MessageofGuest === '') return;
+
 	    this.setState({
 			SignatureOfGuest: event.target.value,
 			MessageofGuest: event.target.value,
@@ -81,7 +84,6 @@ class GuestBook extends Component {
         this.state.messages.forEach( (element) => {
           	messagesList.push(<MessagePost key={element._id} id={element._id} guestSignature={element.guestSignature} message={element.message} onDeleteClickHandler={this.onDeleteClickHandler}/>);
         });
-        console.log(messagesList);
 
 		return (
 			<div>
