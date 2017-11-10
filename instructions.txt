@@ -1,0 +1,31 @@
+# start mongo server
+
+sudo service mongodb stop
+mongod --smallfiles
+
+# start node server
+
+node routes.js
+
+# start front-end server (with react-create-app module)
+
+cd my-app
+npm start
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# fonctions diverses
+
+curl -d '{"SignatureOfGuest":"val", "MessageofGuest":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/signatures
+
