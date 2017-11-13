@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import GuestNames from './GuestNames.jsx';
-import MessagePost from './MessagePost.jsx';
+import { Button, Input, Table, Icon } from 'semantic-ui-react';
+
 
 const axios = require('axios');
 
@@ -42,6 +42,7 @@ class GuestBook extends Component {
       	this.setState({ MessageofGuest: event.target.value });
     }
 
+   
     onAddClickHandler(event) {
 	    event.preventDefault();
 
@@ -82,34 +83,67 @@ class GuestBook extends Component {
 
         var messagesList = [];        
         this.state.messages.forEach( (element) => {
-          	messagesList.push(<MessagePost key={element._id} id={element._id} guestSignature={element.guestSignature} message={element.message} onDeleteClickHandler={this.onDeleteClickHandler}/>);
+          	messagesList.push(<Table.Row key={element._id}>
+									<Table.Cell width="1">
+								        <Icon name='user'/> <strong> {element.guestSignature} </strong>
+								    </Table.Cell>
+								    <Table.Cell width="5">
+								        <div> {element.message} </div>
+								    </Table.Cell>
+								    <Table.Cell collapsing width="1">
+								        <Button size='mini' basic color='red' onClick={e => this.onDeleteClickHandler(element._id,e)}> Delete </Button>
+								    </Table.Cell>        
+						      	</Table.Row>);
         });
 
 		return (
-			<div>
-				<input
-		           onChange={this.handleSignatureOfGuest}
-		           name="SignatureOfGuest"
-		           className="NameinputForm"
-		           value={this.state.SignatureOfGuest}
-		           placeholder="Enter your name"
-		        />
-		 		<textarea
-					onChange={this.handleMessageofGuest}
-					name="MessageofGuest"
-					className="MessageinputForm"
-					value={this.state.MessageofGuest}
-					placeholder="Type a message"
-				/>
+			<div className="guest-book-page-container">
+				<div className="guest-book-form-container">
+					<Input
+			           onChange={this.handleSignatureOfGuest}
+			           name="SignatureOfGuest"
+			           className="NameinputForm"
+			           value={this.state.SignatureOfGuest}
 
-				<button
-		            className="submitbuttonguestbook"
-		            type="submit"
-		            onClick={this.onAddClickHandler}
-		        >
-		            Submit to iegnidurngq <i className="GuestBookButton2" aria-hidden="true" />
-		        </button>
-		        <GuestNames messagesList={messagesList}/>
+			           icon='user'
+			           iconPosition='left'
+			           placeholder='What is your name ?'
+			        /> 
+			 		<Input
+						onChange={this.handleMessageofGuest}
+						name="MessageofGuest"
+						className="MessageinputForm"
+						value={this.state.MessageofGuest}
+
+						fluid
+						icon="comment"
+						iconPosition="left"
+						placeholder="Your message"
+					/>
+
+					<Button
+			            className="submitbuttonguestbook"
+			            type="submit"
+			            onClick={this.onAddClickHandler}
+
+			            primary
+			        >
+			            Submit <i className="GuestBookButton2" aria-hidden="true" />
+			        </Button>
+		        </div>
+
+		        <div className="guest-book-list-container">
+			        <Table celled >
+			        	    <Table.Header>
+								<Table.Row>
+									<Table.HeaderCell colSpan='3'>Messages of my Golden Book</Table.HeaderCell>
+								</Table.Row>
+							</Table.Header>
+							<Table.Body>
+			        			{messagesList}
+			        		</Table.Body>
+		        	</Table>
+	        	</div>	
 	        </div>
 		)
 	}

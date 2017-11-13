@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.png';
 import GuestBook from './GuestBook.jsx'
 import './App.css';
+import { Header } from 'semantic-ui-react';
 
 class App extends Component {
 
@@ -10,11 +11,9 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">My Golden Book</h1>
+          <Header as="h1" color="teal" className="app-title"> My Golden Book </Header>
         </header>
-        <p className="App-intro">
-          Bonjour les kassos, écrivez vos ptits messages ici.
-        </p>
+        <Header as="h3" className="page-title"> Wassup fellows ? Leave me a message </Header>
         <GuestBook />
       </div>
     );
