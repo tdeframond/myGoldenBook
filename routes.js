@@ -59,6 +59,15 @@ app.delete('/api/signatures/:id', function(req, res) {
 	});
 })
 
+//UPDATE
+app.put('/api/signatures/:id', function(req, res) {
+	Signature.findByIdAndUpdate(req.params.id, { $set: { message: req.body.message }}, { new: true }, function (err, tank) {
+  		if (err) return handleError(err);
+	  	res.send(tank);
+	});
+}); 
+
+
 
 
 //====MONGOOSE CONNECT===//

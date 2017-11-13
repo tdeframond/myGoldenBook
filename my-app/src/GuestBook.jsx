@@ -68,7 +68,6 @@ class GuestBook extends Component {
 	};
 
 	onDeleteClickHandler(id, event) {
-		console.log('id' + id);
 		axios.delete('http://localhost:8080/api/signatures/'+id)
 	    .then(response => {
 	        console.log(response, 'Signature deleted!');
@@ -79,8 +78,19 @@ class GuestBook extends Component {
 	    });
 	}
 
-	render() {
+	onUpdateClickHandler(id, event) {
+		axios.put('http://localhost:8080/api/signatures/'+id, {message: "heeeey"})
+	    .then(response => {
+	        console.log(response, 'Signature updated!');
+	      	this.fetchingData();
+	    })
+	    .catch(err => {
+	      	console.log(err, 'Signature not deleted, try again');
+	    });
+	}
 
+
+	render() {
         var messagesList = [];        
         this.state.messages.forEach( (element) => {
           	messagesList.push(<Table.Row key={element._id}>
@@ -90,7 +100,8 @@ class GuestBook extends Component {
 								    <Table.Cell width="5">
 								        <div> {element.message} </div>
 								    </Table.Cell>
-								    <Table.Cell collapsing width="1">
+								    <Table.Cell width="1">
+										<Button size='mini' onClick={e => this.onUpdateClickHandler(element._id,e)}> Update </Button>
 								        <Button size='mini' basic color='red' onClick={e => this.onDeleteClickHandler(element._id,e)}> Delete </Button>
 								    </Table.Cell>        
 						      	</Table.Row>);
