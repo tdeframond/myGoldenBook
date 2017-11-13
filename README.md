@@ -20,6 +20,8 @@ make sure all node modules are well installed in both server and client side (/m
 
   cd my-app
   npm start
+  (dont forget to install semantic for react with yarn)
+  yarn add semantic-ui-react
 
 
 ## divers
