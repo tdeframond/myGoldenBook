@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Input, Table, Icon } from 'semantic-ui-react';
+import { Button, Input, Table, Icon, Popup, Header } from 'semantic-ui-react';
 
 
 const axios = require('axios');
@@ -13,18 +13,19 @@ class GuestBook extends Component {
 	    this.handleMessageofGuest = this.handleMessageofGuest.bind(this);
 		this.onAddClickHandler = this.onAddClickHandler.bind(this);
 		this.onDeleteClickHandler = this.onDeleteClickHandler.bind(this);
+		this.handleMessageUpdate = this.handleMessageUpdate.bind(this);
 
 	    this.state = {
 	    	SignatureOfGuest: "",
 	    	MessageofGuest: "",
-	    	messages: []
+	    	messages: [],
+	    	messageUpdate:""
 	    };
 	}
 
 	fetchingData() {
     	fetch('http://localhost:8080/api/signatures')
         .then(results => {
-        	console.log('fetch succsessful')
         	return results.json();
       	})
       	.then(messages => this.setState({messages: messages}));
@@ -42,6 +43,9 @@ class GuestBook extends Component {
       	this.setState({ MessageofGuest: event.target.value });
     }
 
+    handleMessageUpdate(event) {
+      	this.setState({ messageUpdate: event.target.value });
+    }
    
     onAddClickHandler(event) {
 	    event.preventDefault();
@@ -58,19 +62,16 @@ class GuestBook extends Component {
 	        MessageofGuest: this.state.MessageofGuest,
 	      })
 	    .then(response => {
-	      console.log(response, 'Signature added!');
 	      this.fetchingData();
 	    })
 	    .catch(err => {
 	      console.log(err, 'Signature not added, try again');
 	    });
-
 	};
 
 	onDeleteClickHandler(id, event) {
 		axios.delete('http://localhost:8080/api/signatures/'+id)
 	    .then(response => {
-	        console.log(response, 'Signature deleted!');
 	      	this.fetchingData();
 	    })
 	    .catch(err => {
@@ -79,13 +80,14 @@ class GuestBook extends Component {
 	}
 
 	onUpdateClickHandler(id, event) {
-		axios.put('http://localhost:8080/api/signatures/'+id, {message: "heeeey"})
+		event.preventDefault();
+		axios.put('http://localhost:8080/api/signatures/'+id, {message: this.state.messageUpdate})
 	    .then(response => {
-	        console.log(response, 'Signature updated!');
 	      	this.fetchingData();
+    	    this.setState({messageUpdate: ""});
 	    })
 	    .catch(err => {
-	      	console.log(err, 'Signature not deleted, try again');
+	      	console.log(err, 'Signature not updated, try again');
 	    });
 	}
 
@@ -101,14 +103,29 @@ class GuestBook extends Component {
 								        <div> {element.message} </div>
 								    </Table.Cell>
 								    <Table.Cell width="1">
-										<Button size='mini' onClick={e => this.onUpdateClickHandler(element._id,e)}> Update </Button>
-								        <Button size='mini' basic color='red' onClick={e => this.onDeleteClickHandler(element._id,e)}> Delete </Button>
+								
+								  	<Popup
+								    	trigger={<Button size='mini'> Update </Button>}
+								    	content={ <Input 
+								    				autoFocus placeholder='New message...' 
+								    				onChange={e => this.handleMessageUpdate(e)} 
+								    				onKeyPress={ event => { if (event.key === 'Enter') {this.onUpdateClickHandler(element._id, event)}}
+								    			} /> }
+								    	on='click'
+								    	position='top right'
+								    	hideOnScroll
+								  	/>
+								        
+							        <Button size='mini' basic color='red' value={this.state.messageUpdate} onClick={e => this.onDeleteClickHandler(element._id,e)}> Delete </Button>
 								    </Table.Cell>        
 						      	</Table.Row>);
         });
 
 		return (
 			<div className="guest-book-page-container">
+				
+				<Header as="h3" className="page-title"> Wassup fellows ? Leave me a message </Header>
+
 				<div className="guest-book-form-container">
 					<Input
 			           onChange={this.handleSignatureOfGuest}
